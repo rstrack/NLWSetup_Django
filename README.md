@@ -37,8 +37,7 @@ Utilizando Django Rest Framework e React
 * No terminal, crie as tabelas do banco de dados:
 ```
     cd ../api
-    python manage.py migrate
-    python manage.py makemigrations
+    python manage.py makemigrations core
 ```
 
 * Inicie o servidor:
