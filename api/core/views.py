@@ -106,6 +106,7 @@ class SummaryViewSet(ViewSet):
             FROM core_day D
             WHERE
                 D.date >= {day}
+            ORDER BY D.date
             '''
         )
         serializer = SummarySerializer(query, many=True)
