@@ -7,15 +7,52 @@ export const theme: Theme = createTheme({
             default:'#09090A'
         },
         primary:{
-            main: "#673ab7"
-        },
-        secondary:{
-            main: "#673ab7"
+            main: '#673ab7',
+            contrastText: '#FFFFFF'
         },
     },
     typography:{
         button:{
-            textTransform:'none'
+            textTransform:'none',
+        },
+        allVariants:{
+            color:'white'
+        }
+    },
+    components:{
+        MuiButton:{
+            variants:[
+                {
+                    props:{variant:"outlined"},
+                    style:{
+                        color:'#FFFFFF',
+                        height: 48,
+                    }
+                }
+            ]
+        },
+        MuiTextField:{
+            variants:[
+                {
+                    props:{variant:"outlined"},
+                    style:{
+                        input:{
+                            color:'#FFFFFF'
+                        }
+                    },
+
+                }
+            ]
+        },
+        MuiPopover:{
+            defaultProps:{
+                PaperProps:{
+                    style:{
+                        borderRadius:8, 
+                        backgroundColor:'#18181b'
+                    }
+                }
+            }
         }
     }
 })

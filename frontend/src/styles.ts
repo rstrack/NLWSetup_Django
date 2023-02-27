@@ -1,5 +1,5 @@
 import { styled } from '@mui/system';
-import { Grid } from "@mui/material"
+import { Box, Grid, LinearProgress, Popover } from "@mui/material"
 
 type DayComponentDivProps = {
     disabled?: boolean,
@@ -9,7 +9,10 @@ type DayComponentDivProps = {
 export const DayComponentDiv = styled('div')(({disabled, percent}:DayComponentDivProps)=>({
     width:40, 
     height:40, 
-    border:( disabled || !percent ? '2px solid #27272a' : '2px solid #a78bfa' ), 
+    border:( 
+        disabled || !percent ? '2px solid #27272a' : 
+        percent < 0.8 ? '2px solid #8b5cf6' : '2px solid #a78bfa'
+    ), 
     borderRadius:'8px', 
     opacity: ( disabled ? '40%' : '100%' ),
     cursor: ( disabled ? 'not-allowed' : 'pointer' ),
@@ -69,4 +72,50 @@ export const WeekDaysText = styled('div')({
     alignItems: 'center', 
     fontSize: 18, 
     fontWeight: 'bold'
+})
+
+export const ModalBox = styled(Box)({
+    backgroundColor:'#18181b',
+    padding:'40px',
+    borderRadius: '16px',
+    width: '100%',
+    maxWidth: '448px',
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+
+})
+
+export const CustomPopover = styled(Popover)`
+&& {
+  & .MuiPaper-root {
+    borderRadius: 8px;
+  }
+}
+`;
+
+export const PopoverBox = styled(Box)({
+    backgroundColor: '#18181b',
+    color:'white',
+    minWidth: '240px',
+    margin: 16,
+    gap: 0,
+    padding: 6,
+    display:'flex',
+    flexDirection: 'column'
+})
+
+export const CustomLinearProgress = styled (LinearProgress)({
+    height: 10,
+    borderRadius: 5,
+    marginBottom: 16
+})
+
+export const CustomForm = styled('form')({
+    width:'100%', 
+    display:'flex', 
+    flexDirection:'column', 
+    gap:16, 
+    marginTop:'24px'
 })

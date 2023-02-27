@@ -1,48 +1,31 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 
-import { api } from "../lib/axios";
-import { SummaryTableExternalDiv, SummaryTableInternalDiv, WeekDaysText } from "../styles";
-import { generateDateArray } from "../util/generate-date-array";
 import DayComponent from "./dayComponent";
+import { SummaryTableExternalDiv, SummaryTableInternalDiv, WeekDaysText } from "../styles";
+import { SummaryContext } from "../contexts/summaryContext";
+import { timeZoneOffsetMillis } from "../util/date-utils";
 
 const weekDays = ['S', 'T', 'Q', 'Q', 'S', 'S', 'D']
 
 const minimumSummaryDatesSize = 18 * 7;
 
-type Summary = {
-    id: string;
-    date: string;
-    total_habits: number;
-    completed_habits: number;
-}[]
-
 const SummaryTable = () => {
 
-    const [summary, setSummary] = useState<Summary>([]);
-    const [summaryDates, setSummaryDates] = useState<Array<Date>>([]);
-    const [amountOfDaysToFill, setAmountOfDaysToFill] = useState<number>(minimumSummaryDatesSize);
+    const {summary, summaryDates, getSummary} = useContext(SummaryContext)
 
     useEffect(() => {
-        api.get("summary")
-        .then((response) => {
-            setSummary(response.data);
-            setSummaryDates(
-                response.data.length > 0 ? 
-                generateDateArray(
-                    new Date(response.data[0].date),
-                    new Date()
-                ) : [])
-            setAmountOfDaysToFill(
-                minimumSummaryDatesSize - 
-                summaryDates.length - 
-                (summaryDates.length > 0 ? 
-                    (getWeekday(summaryDates[0])+1)%7 : 0
-                ))
-        });
+        getSummary();
     }, []);
 
     // retorna o dia da semana , sendo 0=seg, 1=ter, 2=qua ...
     const getWeekday = (date: Date) => [6, 0, 1, 2, 3, 4, 5][date.getDay()];
+
+    const amountOfDaysToFill = 
+        minimumSummaryDatesSize - 
+        summaryDates.length - 
+        (summaryDates.length > 0 ? 
+            (getWeekday(summaryDates[0])) : 0
+        )
 
     return (
         <SummaryTableExternalDiv>
@@ -56,7 +39,7 @@ const SummaryTable = () => {
                     )})}
                 {/* preenche com dias disabled até o primeiro dia cadastrado */}
                 {summary.length > 0 && (
-                    [...Array((getWeekday(summaryDates[0])+1)%7).keys()]
+                    [...Array(getWeekday(summaryDates[0])).keys()]
                     .map((key) => {
                         return <DayComponent key={key} disabled/>
                     })
@@ -65,22 +48,23 @@ const SummaryTable = () => {
                 {summary.length > 0 && (
                     summaryDates.map((date) => {
                         const actual = summary.find(
-                            value => new Date(value.date).getTime() == date.getTime()
+                            value => new Date(value.date).getTime() + timeZoneOffsetMillis() === date.getTime()
                         )
                         return (
                             <DayComponent 
                                 key={String(date)} 
                                 total={actual && actual.total_habits} 
                                 completed={actual && actual.completed_habits}
+                                date={date}
+                                getSummary={getSummary}
                             />
                         )
                     })
                 )}
                 {/* completa o resumo com dias disabled */}
-                {amountOfDaysToFill &&
-                    [...Array(amountOfDaysToFill).keys()].map((key) => {
+                {[...Array(amountOfDaysToFill).keys()].map((key) => {
                         return <DayComponent key={key} disabled/>
-                    })}
+                })}
             </SummaryTableInternalDiv>
         </SummaryTableExternalDiv>
     )
