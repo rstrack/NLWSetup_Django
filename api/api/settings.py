@@ -10,11 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-from pathlib import Path
+import os
 
 from datetime import timedelta
+from dotenv import load_dotenv
+from pathlib import Path
 
-from env import env
+# Acess environment variables
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -86,11 +89,11 @@ WSGI_APPLICATION = 'api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': env['db_name'],
-        'USER': env['db_user'],
-        'PASSWORD': env['db_psswd'],
-        'HOST': env['db_host'],   # Or an IP Address that your DB is hosted on
-        'PORT': env['db_port'],
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWD'),
+        'HOST': os.getenv('DB_HOST'),   # Or an IP Address that your DB is hosted on
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
