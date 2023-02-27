@@ -32,8 +32,7 @@ Utilizando Django Rest Framework e React
     use nlwsetup;
 ```
 
-* Crie o arquivo **env.py** na raíz da API, usando como base o arquivo **env_example.py**, utilizando suas credenciais (obs.: não é uma boa prática este método, será corrigido em versões futuras)
-
+* Crie o arquivo **.env** na raíz da API, usando como base o arquivo **example.env**, utilizando suas credenciais
 * No terminal, crie as tabelas do banco de dados:
 ```
     cd ../api
